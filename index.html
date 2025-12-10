@@ -15,9 +15,10 @@
         }
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0f172a;
+            background-color: #050b14;
             color: #f8fafc;
             overflow-x: hidden;
+            position: relative;
         }
         h1, h2, h3, .heading-font {
             font-family: 'Space Grotesk', sans-serif;
@@ -25,22 +26,23 @@
         
         /* Glassmorphism Classes */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(5, 11, 20, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
         .glass-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(79, 70, 229, 0.5);
-            box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.5); /* Indigo-500 */
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.4);
         }
 
         /* Animations */
@@ -59,7 +61,7 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #050b14;
         }
         ::-webkit-scrollbar-thumb {
             background: #334155;
@@ -68,68 +70,79 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #475569;
         }
-
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
+        
+        /* Canvas positioning */
+        #physics-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind content */
+            pointer-events: none;
         }
     </style>
 </head>
 <body class="antialiased selection:bg-indigo-500 selection:text-white">
 
-    <!-- Background Ambience -->
-    <div class="blob bg-indigo-600 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="blob bg-purple-600 w-96 h-96 rounded-full bottom-0 right-0 translate-x-1/2 translate-y-1/2"></div>
+    <!-- Interactive Physics Equations Background -->
+    <canvas id="physics-canvas"></canvas>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-panel border-b border-white/10">
+    <nav class="fixed w-full z-50 glass-panel">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="atom" class="text-indigo-400 h-8 w-8"></i>
+                <div class="flex items-center gap-3">
+                    <div class="relative group cursor-pointer">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-200"></div>
+                        <i data-lucide="atom" class="relative text-white h-8 w-8 animate-spin-slow" style="animation-duration: 10s;"></i>
+                    </div>
                     <div class="flex flex-col">
-                        <span class="font-bold text-lg md:text-xl tracking-tight leading-none">Smart Physics Class</span>
+                        <span class="font-bold text-lg md:text-xl tracking-tight leading-none text-white font-heading">Smart Physics Class</span>
                         <span class="text-[10px] md:text-xs text-indigo-400 font-bold tracking-widest uppercase">by Biplab Bawali</span>
                     </div>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#about" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">About</a>
-                        <a href="#mentor" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">Mentor</a>
-                        <a href="#schedule" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">Schedule</a>
-                        <a href="#join" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full text-sm font-bold transition shadow-lg shadow-indigo-500/30">Join Now</a>
+                        <a href="#about" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition text-slate-400">About</a>
+                        <a href="#mentor" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition text-slate-400">Mentor</a>
+                        <a href="#schedule" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition text-slate-400">Schedule</a>
+                        <a href="#join" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-full text-sm font-bold transition shadow-[0_0_20px_rgba(79,70,229,0.5)] hover:shadow-[0_0_30px_rgba(79,70,229,0.7)]">Join Now</a>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+    <!-- Hero Section (Reverted to Original Text) -->
+    <header class="relative pt-32 pb-20 lg:pt-56 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-bounce">
-                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                <span class="text-sm font-medium text-indigo-200">100% Free Program for Class 9 CBSE</span>
+            
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-bounce border-indigo-500/30">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span class="text-sm font-bold text-indigo-100 tracking-wide">100% FREE • CLASS 9 CBSE</span>
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+            <h1 class="text-6xl md:text-8xl font-bold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-br from-white via-indigo-100 to-indigo-900 drop-shadow-2xl" style="line-height: 1.1;">
                 Boost Your Physics Marks.<br>
                 <span class="text-indigo-500">Structured Practice</span> is Key.
             </h1>
             
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-300">
+            <p class="mt-6 max-w-2xl mx-auto text-xl md:text-2xl text-slate-300 font-light leading-relaxed">
                 An 8-week intensive program combining chapter-wise revision, mock tests, and live solution discussions. 
                 Designed exclusively for West Bengal students.
             </p>
             
-            <div class="mt-10 flex justify-center gap-4 flex-col sm:flex-row">
-                <a href="https://wa.link/nxxwiv" target="_blank" class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-bold text-white transition-all duration-200 bg-green-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:bg-green-700 shadow-lg shadow-green-600/30">
-                    <i data-lucide="message-circle" class="mr-2 h-5 w-5"></i>
-                    Join WhatsApp Group
+            <div class="mt-12 flex justify-center gap-6 flex-col sm:flex-row">
+                <a href="https://wa.link/nxxwiv" target="_blank" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-green-600 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:bg-green-500 shadow-[0_0_20px_rgba(22,163,74,0.5)] hover:-translate-y-1 overflow-hidden">
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                    <i data-lucide="message-circle" class="mr-2 h-5 w-5 relative z-10"></i>
+                    <span class="relative z-10">Join WhatsApp Group</span>
                 </a>
-                <a href="#schedule" class="inline-flex items-center justify-center px-8 py-3 text-lg font-bold text-white transition-all duration-200 glass-card rounded-full hover:bg-white/10">
+                <a href="#schedule" class="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 glass-card rounded-xl hover:bg-white/10 hover:-translate-y-1 backdrop-blur-md">
                     View Schedule
                 </a>
             </div>
@@ -137,56 +150,48 @@
     </header>
 
     <!-- Philosophy Section -->
-    <section id="about" class="py-20 bg-slate-900/50">
+    <section id="about" class="py-24 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-2 gap-12 items-center reveal">
+            <div class="grid md:grid-cols-2 gap-16 items-center reveal">
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">The Philosophy</h2>
-                    <div class="space-y-6">
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
-                                <i data-lucide="alert-triangle" class="h-6 w-6"></i>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 text-white">The Philosophy</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-6 group">
+                            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500/10 to-red-900/10 flex items-center justify-center text-red-400 border border-red-500/20 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(248,113,113,0.2)]">
+                                <i data-lucide="alert-triangle" class="h-7 w-7"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold mb-1">The Challenge</h3>
-                                <p class="text-slate-400">Physics feels confusing? Marks stagnant? The issue is often lack of structured practice, not lack of studying.</p>
+                                <h3 class="text-2xl font-bold mb-2 text-slate-100">The Problem</h3>
+                                <p class="text-slate-400 leading-relaxed">Memorizing formulas doesn't work. Students struggle because they can't <em class="text-red-300">visualize</em> the concepts of Motion and Gravity.</p>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400">
-                                <i data-lucide="check-circle-2" class="h-6 w-6"></i>
+                        <div class="flex gap-6 group">
+                            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500/10 to-green-900/10 flex items-center justify-center text-green-400 border border-green-500/20 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(74,222,128,0.2)]">
+                                <i data-lucide="check-circle-2" class="h-7 w-7"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold mb-1">The Solution</h3>
-                                <p class="text-slate-400">Systematic chapter-wise coverage, regular mock tests, and live solution discussions for instant doubt clearing.</p>
+                                <h3 class="text-2xl font-bold mb-2 text-slate-100">The Solution</h3>
+                                <p class="text-slate-400 leading-relaxed">We use <span class="text-green-300">Structured Practice</span>. Learn the concept, solve the numerical, correct the mistake. Repeat.</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="mt-8 p-6 glass-card rounded-2xl border-l-4 border-indigo-500">
-                        <p class="text-lg italic font-medium">"Students don't learn by reading → They learn by solving."</p>
-                        <p class="mt-2 text-indigo-400 font-bold">Practice + Correction = Confidence + Marks</p>
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="absolute inset-0 bg-indigo-500/30 blur-3xl rounded-full"></div>
-                    <div class="relative glass-panel p-8 rounded-2xl">
-                        <h3 class="text-2xl font-bold mb-6 border-b border-white/10 pb-4">Who Is This For?</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-center gap-3">
-                                <i data-lucide="check" class="text-indigo-400"></i>
-                                <span>Class 9 Students preparing for finals</span>
+                    <div class="absolute inset-0 bg-indigo-600/20 blur-[100px] rounded-full"></div>
+                    <div class="relative glass-panel p-10 rounded-3xl border border-white/10 shadow-2xl">
+                        <h3 class="text-2xl font-bold mb-8 border-b border-white/10 pb-4 text-white">Who Is This For?</h3>
+                        <ul class="space-y-6">
+                            <li class="flex items-center gap-4 group">
+                                <div class="bg-indigo-500/20 p-2 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300"><i data-lucide="check" class="text-indigo-400 group-hover:text-white w-5 h-5"></i></div>
+                                <span class="text-slate-200 text-lg">Class 9 Students preparing for finals</span>
                             </li>
-                            <li class="flex items-center gap-3">
-                                <i data-lucide="check" class="text-indigo-400"></i>
-                                <span>Students who fear Physics & find it confusing</span>
+                            <li class="flex items-center gap-4 group">
+                                <div class="bg-indigo-500/20 p-2 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300"><i data-lucide="check" class="text-indigo-400 group-hover:text-white w-5 h-5"></i></div>
+                                <span class="text-slate-200 text-lg">Students who fear numerical problems</span>
                             </li>
-                            <li class="flex items-center gap-3">
-                                <i data-lucide="check" class="text-indigo-400"></i>
-                                <span>Parents wanting disciplined, exam-oriented practice</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <i data-lucide="check" class="text-indigo-400"></i>
-                                <span>Building a strong foundation for Class 10 (JEE/NEET)</span>
+                            <li class="flex items-center gap-4 group">
+                                <div class="bg-indigo-500/20 p-2 rounded-lg group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300"><i data-lucide="check" class="text-indigo-400 group-hover:text-white w-5 h-5"></i></div>
+                                <span class="text-slate-200 text-lg">Future JEE / NEET aspirants</span>
                             </li>
                         </ul>
                     </div>
@@ -196,34 +201,51 @@
     </section>
 
     <!-- Mentor Section -->
-    <section id="mentor" class="py-20 relative overflow-hidden">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <span class="text-indigo-400 font-bold tracking-wider uppercase text-sm">Expert Guidance</span>
-                <h2 class="text-4xl font-bold mt-2">Know Your Mentor</h2>
+    <section id="mentor" class="py-24 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 reveal">
+                <span class="text-indigo-400 font-bold tracking-widest uppercase text-sm border border-indigo-500/30 px-4 py-1 rounded-full">World-Class Guidance</span>
+                <h2 class="text-4xl md:text-6xl font-bold mt-4 text-white">Meet Your Mentor</h2>
             </div>
             
-            <div class="glass-panel rounded-3xl p-1 md:p-8 reveal">
-                <div class="flex flex-col md:flex-row gap-8 items-center">
-                    <div class="w-full md:w-1/3 flex justify-center">
-                        <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-indigo-500/30 shadow-2xl bg-slate-800">
-                             <!-- INSTRUCTION: Replace 'your-image-filename.jpg' below with the actual name of your image file -->
-                            <img src="biplab-sir.jpg.jpg" alt="Biplab Bawali" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><i data-lucide=\'image\' class=\'w-16 h-16 text-slate-600\'></i></div>'">
+            <div class="glass-panel rounded-[2.5rem] p-1 md:p-12 reveal bg-gradient-to-b from-slate-900/40 to-black/40 border border-white/5 relative overflow-hidden group">
+                <!-- Background decoration -->
+                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-indigo-600/20 transition duration-700"></div>
+
+                <div class="flex flex-col md:flex-row gap-12 items-center relative z-10">
+                    <div class="w-full md:w-5/12 flex justify-center">
+                        <div class="relative group/image">
+                            <!-- Rotating dashed ring -->
+                            <div class="absolute inset-0 rounded-full border-2 border-dashed border-indigo-500/30 animate-spin-slow" style="animation-duration: 20s;"></div>
+                            <div class="absolute -inset-4 bg-indigo-500 rounded-full blur-xl opacity-20 group-hover/image:opacity-40 transition duration-500"></div>
+                            
+                            <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-white/10 shadow-2xl bg-slate-900 grayscale group-hover/image:grayscale-0 transition duration-500">
+                                 <!-- Corrected image source path from user input (removed double .jpg) -->
+                                <img src="biplab-sir.jpg" alt="Biplab Bawali" class="w-full h-full object-cover transform group-hover/image:scale-110 transition duration-700" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-slate-900\'><i data-lucide=\'user\' class=\'w-24 h-24 text-indigo-400\'></i></div>'">
+                            </div>
+                            
+                            <!-- Floating Badge -->
+                            <div class="absolute -bottom-4 -right-4 glass-card px-4 py-2 rounded-xl flex items-center gap-2 animate-bounce" style="animation-duration: 3s;">
+                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <span class="text-xs font-bold text-white">IISc Bangalore</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-full md:w-2/3 text-center md:text-left">
-                        <h3 class="text-3xl font-bold text-white mb-2">Biplab Bawali</h3>
-                        <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
-                            <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">M.Sc. Physics (1st Class)</span>
-                            <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">Ph.D. (Rajabazar Science College)</span>
+                    <div class="w-full md:w-7/12 text-center md:text-left">
+                        <h3 class="text-4xl md:text-5xl font-bold text-white mb-4">Biplab Bawali</h3>
+                        <p class="text-xl text-indigo-300 font-medium mb-6">Ph.D. Scholar & Researcher</p>
+
+                        <div class="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
+                            <span class="px-4 py-2 rounded-lg bg-indigo-500/10 text-indigo-200 text-xs font-bold border border-indigo-500/20 uppercase tracking-wide">M.Sc. Physics (1st Class)</span>
+                            <span class="px-4 py-2 rounded-lg bg-purple-500/10 text-purple-200 text-xs font-bold border border-purple-500/20 uppercase tracking-wide">Rajabazar Science College</span>
                         </div>
                         
-                        <div class="space-y-4 text-slate-300">
-                            <p class="text-lg">
-                                <span class="text-white font-semibold">Current Position:</span> Research Associate at <span class="text-yellow-400 font-bold">IISc Bangalore</span>
+                        <div class="space-y-6 text-slate-300 text-lg leading-relaxed">
+                            <p class="border-l-4 border-yellow-500 pl-6">
+                                Currently serving as a <strong class="text-white">Research Associate</strong> at India's #1 Institute, <span class="text-yellow-400 font-bold">IISc Bangalore</span>.
                             </p>
                             <p>
-                                With strong academic credentials and research experience at India's premier institute, Biplab Sir brings conceptual clarity and a practical problem-solving approach to Physics education.
+                                Unlike typical tuition teachers, Biplab Sir brings <span class="text-white">deep research insights</span> to the classroom. He doesn't just teach you how to solve a problem; he teaches you <span class="italic text-indigo-300">how to think like a physicist</span>.
                             </p>
                         </div>
                     </div>
@@ -233,78 +255,84 @@
     </section>
 
     <!-- Features Grid -->
-    <section class="py-20 bg-slate-900/50">
+    <section class="py-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold">What's Included?</h2>
-                <p class="text-slate-400 mt-2">Everything you need to score 85%+</p>
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">The Premium Experience</h2>
+                <p class="text-slate-400 text-lg">Top-tier education. Zero cost.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 mb-4">
-                        <i data-lucide="book-open"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-blue-500/20"></div>
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition border border-blue-500/20">
+                        <i data-lucide="book-open" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Chapter-wise Revision</h3>
-                    <p class="text-sm text-slate-400">Full CBSE syllabus covered systematically with focus on deep understanding.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Systematic Revision</h3>
+                    <p class="text-slate-400 leading-relaxed">We break down complex chapters like Gravitation into digestible chunks.</p>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center text-red-400 mb-4">
-                        <i data-lucide="video"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-red-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-red-500/20"></div>
+                    <div class="w-14 h-14 bg-red-500/20 rounded-2xl flex items-center justify-center text-red-400 mb-6 group-hover:scale-110 transition border border-red-500/20">
+                        <i data-lucide="video" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Live Online Classes</h3>
-                    <p class="text-sm text-slate-400">Interactive sessions via Google Meet with instant doubt solving.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Live Classes</h3>
+                    <p class="text-slate-400 leading-relaxed">Interactive Google Meet sessions where you can unmute and ask doubts instantly.</p>
                 </div>
 
                 <!-- Feature 3 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center text-green-400 mb-4">
-                        <i data-lucide="file-check"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-green-500/20"></div>
+                    <div class="w-14 h-14 bg-green-500/20 rounded-2xl flex items-center justify-center text-green-400 mb-6 group-hover:scale-110 transition border border-green-500/20">
+                        <i data-lucide="file-check" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Final Exam Pattern</h3>
-                    <p class="text-sm text-slate-400">Questions strictly focused on CBSE exam pattern and marking scheme.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">CBSE Exam Pattern</h3>
+                    <p class="text-slate-400 leading-relaxed">Questions strictly aligned with the latest CBSE marking scheme and trends.</p>
                 </div>
 
                 <!-- Feature 4 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 mb-4">
-                        <i data-lucide="box"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-purple-500/20"></div>
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition border border-purple-500/20">
+                        <i data-lucide="box" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">3D Animations</h3>
-                    <p class="text-sm text-slate-400">Visual learning for complex concepts to aid memory retention.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">3D Visual Learning</h3>
+                    <p class="text-slate-400 leading-relaxed">Don't just read about Momentum. See it in action with our animations.</p>
                 </div>
 
                 <!-- Feature 5 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center text-yellow-400 mb-4">
-                        <i data-lucide="file-text"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-yellow-500/20"></div>
+                    <div class="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition border border-yellow-500/20">
+                        <i data-lucide="file-text" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Digital Classnotes</h3>
-                    <p class="text-sm text-slate-400">Comprehensive study material provided after every session.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">Digital Notes</h3>
+                    <p class="text-slate-400 leading-relaxed">High-quality PDFs provided after every session for quick revision.</p>
                 </div>
 
                 <!-- Feature 6 -->
-                <div class="glass-card p-6 rounded-2xl reveal">
-                    <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center text-pink-400 mb-4">
-                        <i data-lucide="message-square"></i>
+                <div class="glass-card p-8 rounded-3xl reveal group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-bl-full -mr-4 -mt-4 transition group-hover:bg-pink-500/20"></div>
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-2xl flex items-center justify-center text-pink-400 mb-6 group-hover:scale-110 transition border border-pink-500/20">
+                        <i data-lucide="message-square" class="w-7 h-7"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
-                    <p class="text-sm text-slate-400">Dedicated WhatsApp group for doubt clearing and peer support.</p>
+                    <h3 class="text-2xl font-bold mb-3 text-white">24/7 WhatsApp Support</h3>
+                    <p class="text-slate-400 leading-relaxed">Stuck on a problem at 10 PM? Drop it in the group and get help.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Schedule Section (Accordion) -->
-    <section id="schedule" class="py-20">
+    <section id="schedule" class="py-24">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 reveal">
+            <div class="text-center mb-16 reveal">
                 <span class="text-indigo-400 font-bold tracking-wider uppercase text-sm">The Roadmap</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2">8-Week Complete Strategy</h2>
-                <p class="text-slate-400 mt-2">3 Days per Week | 24 Sessions Total</p>
+                <h2 class="text-4xl md:text-5xl font-bold mt-2 text-white">8-Week Strategy</h2>
+                <p class="text-slate-400 mt-2 text-lg">24 Sessions to Mastery</p>
             </div>
 
             <div class="space-y-4 reveal" id="accordion-container">
@@ -314,59 +342,69 @@
     </section>
 
     <!-- Test Summary Table -->
-    <section class="py-20 bg-slate-900/50">
+    <section class="py-24 relative">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel rounded-2xl p-6 overflow-hidden reveal">
-                <h3 class="text-2xl font-bold mb-6">Test Summary Overview</h3>
+            <div class="glass-panel rounded-[2rem] p-8 md:p-12 overflow-hidden reveal shadow-2xl border border-white/10">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                    <div>
+                        <h3 class="text-3xl font-bold text-white mb-2">Assessment Timeline</h3>
+                        <p class="text-slate-400">Track your progress from Week 1 to Week 8.</p>
+                    </div>
+                    <div class="flex gap-2 text-xs font-bold uppercase tracking-wider">
+                         <span class="flex items-center gap-2 px-3 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Chapter Test</span>
+                         <span class="flex items-center gap-2 px-3 py-1 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/30"><span class="w-2 h-2 rounded-full bg-yellow-500"></span> Mixed</span>
+                    </div>
+                </div>
+                
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-white/10 text-indigo-300 uppercase text-xs tracking-wider">
-                                <th class="p-4">Week</th>
-                                <th class="p-4">Test Type</th>
-                                <th class="p-4">Chapters</th>
+                                <th class="p-5 bg-black/20">Week</th>
+                                <th class="p-5 bg-black/20">Test Type</th>
+                                <th class="p-5 bg-black/20">Chapters</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm text-slate-300 divide-y divide-white/5">
+                        <tbody class="text-sm text-slate-300 divide-y divide-white/5 font-medium">
                             <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">1</td>
-                                <td class="p-4">Chapter Test</td>
-                                <td class="p-4">Motion</td>
+                                <td class="p-5 font-bold text-white">1</td>
+                                <td class="p-5"><span class="text-indigo-300">Chapter Test</span></td>
+                                <td class="p-5">Motion</td>
                             </tr>
                             <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">2</td>
-                                <td class="p-4">Chapter Test</td>
-                                <td class="p-4">Force & Laws</td>
+                                <td class="p-5 font-bold text-white">2</td>
+                                <td class="p-5"><span class="text-indigo-300">Chapter Test</span></td>
+                                <td class="p-5">Force & Laws</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition bg-yellow-500/5">
+                                <td class="p-5 font-bold text-white">3</td>
+                                <td class="p-5"><span class="text-yellow-400 font-bold">Mixed Test 1</span></td>
+                                <td class="p-5 text-white">Motion + Force</td>
                             </tr>
                             <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">3</td>
-                                <td class="p-4 text-yellow-400">Mixed Test 1</td>
-                                <td class="p-4">Motion + Force</td>
+                                <td class="p-5 font-bold text-white">4</td>
+                                <td class="p-5"><span class="text-indigo-300">Chapter Test</span></td>
+                                <td class="p-5">Gravitation</td>
                             </tr>
                             <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">4</td>
-                                <td class="p-4">Chapter Test</td>
-                                <td class="p-4">Gravitation</td>
+                                <td class="p-5 font-bold text-white">5</td>
+                                <td class="p-5"><span class="text-indigo-300">Chapter Test</span></td>
+                                <td class="p-5">Work & Energy</td>
                             </tr>
-                            <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">5</td>
-                                <td class="p-4">Chapter Test</td>
-                                <td class="p-4">Work & Energy</td>
+                            <tr class="hover:bg-white/5 transition bg-yellow-500/5">
+                                <td class="p-5 font-bold text-white">6</td>
+                                <td class="p-5"><span class="text-yellow-400 font-bold">Mixed Test 2</span></td>
+                                <td class="p-5 text-white">Gravitation + Work & Energy</td>
                             </tr>
-                            <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">6</td>
-                                <td class="p-4 text-yellow-400">Mixed Test 2</td>
-                                <td class="p-4">Gravitation + Work & Energy</td>
+                            <tr class="hover:bg-white/5 transition bg-pink-500/5">
+                                <td class="p-5 font-bold text-white">7</td>
+                                <td class="p-5"><span class="text-pink-400 font-bold">Half Syllabus</span></td>
+                                <td class="p-5 text-white">Chapters 1-4</td>
                             </tr>
-                            <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">7</td>
-                                <td class="p-4 text-pink-400">Half Syllabus</td>
-                                <td class="p-4">Chapters 1-4</td>
-                            </tr>
-                            <tr class="hover:bg-white/5 transition">
-                                <td class="p-4 font-bold text-white">8</td>
-                                <td class="p-4 text-green-400 font-bold">Full Syllabus</td>
-                                <td class="p-4">Sound + All Chapters</td>
+                            <tr class="hover:bg-white/5 transition bg-green-500/5">
+                                <td class="p-5 font-bold text-white">8</td>
+                                <td class="p-5"><span class="text-green-400 font-bold">Full Syllabus</span></td>
+                                <td class="p-5 text-white font-bold">Sound + All Chapters</td>
                             </tr>
                         </tbody>
                     </table>
@@ -376,34 +414,43 @@
     </section>
 
     <!-- CTA Section -->
-    <section id="join" class="py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-indigo-900/40"></div>
+    <section id="join" class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-indigo-950/50 to-transparent"></div>
         <div class="max-w-4xl mx-auto px-4 relative z-10 text-center reveal">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Physics Easier</h2>
-            <p class="text-xl text-indigo-200 mb-8">"Practice + Correction = Confidence + Marks"</p>
+            <h2 class="text-5xl md:text-7xl font-bold mb-8 text-white tracking-tight">Let's Make Physics Easier</h2>
+            <p class="text-2xl text-indigo-200 mb-12 font-light italic">"Practice + Correction = Confidence + Marks"</p>
             
-            <div class="glass-panel max-w-lg mx-auto p-8 rounded-3xl border border-indigo-500/50 shadow-2xl shadow-indigo-500/20">
-                <h3 class="text-2xl font-bold mb-4">Secure Your Spot Now</h3>
-                <p class="text-sm text-slate-400 mb-6">Small batch size for personalized attention.</p>
+            <div class="glass-panel max-w-lg mx-auto p-10 rounded-[2.5rem] border border-indigo-500/50 shadow-[0_0_50px_rgba(79,70,229,0.15)] relative backdrop-blur-xl">
+                <!-- Floating icon decoration -->
+                <div class="absolute -top-8 -right-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-4 shadow-xl animate-bounce">
+                    <i data-lucide="star" class="h-8 w-8 text-white fill-current"></i>
+                </div>
+
+                <h3 class="text-3xl font-bold mb-4 text-white">Secure Your Spot</h3>
+                <p class="text-sm text-slate-300 mb-8 uppercase tracking-widest">Limited Batch Size</p>
                 
-                <a href="https://wa.link/nxxwiv" target="_blank" class="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 mb-4">
+                <a href="https://wa.link/nxxwiv" target="_blank" class="block w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-xl flex items-center justify-center gap-3 mb-6 text-lg">
                     <i data-lucide="message-circle" class="h-6 w-6"></i>
                     Join WhatsApp Group
                 </a>
                 
-                <div class="flex flex-col gap-2">
-                    <a href="tel:7980143221" class="text-lg font-bold hover:text-indigo-400 transition">
-                        <i data-lucide="phone" class="inline h-5 w-5 mr-2"></i> 7980143221
+                <div class="flex flex-col gap-3">
+                    <a href="tel:7980143221" class="text-xl font-bold text-indigo-300 hover:text-white transition flex justify-center items-center gap-2">
+                        <i data-lucide="phone" class="h-5 w-5"></i> 7980143221
                     </a>
-                    <span class="text-xs text-slate-500 bg-black/20 px-3 py-1 rounded-full inline-block mx-auto">Call only between 8 PM - 10 PM</span>
+                    <span class="text-xs text-slate-400 bg-black/40 px-4 py-1.5 rounded-full inline-block mx-auto border border-white/10">Call availability: 8 PM - 10 PM</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-black/40 py-8 border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
-            <p>&copy; 2025 Physics Smart Class by BIPLAB BAWALI.</p>
+    <footer class="bg-black py-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+             <div class="flex justify-center items-center gap-2 mb-4">
+                 <i data-lucide="atom" class="text-indigo-500 h-6 w-6"></i>
+                 <span class="font-bold text-white text-lg">Smart Physics Class</span>
+             </div>
+            <p class="text-slate-600 text-sm">&copy; 2025 Biplab Bawali. All rights reserved.</p>
         </div>
     </footer>
 
@@ -417,7 +464,7 @@
         
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
-            const elementVisible = 150;
+            const elementVisible = 100;
             
             revealElements.forEach((reveal) => {
                 const elementTop = reveal.getBoundingClientRect().top;
@@ -427,7 +474,115 @@
             });
         }
         window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Trigger once on load
+        revealOnScroll(); 
+
+        // --- BACKGROUND ANIMATION (PHYSICS EQUATIONS) ---
+        const canvas = document.getElementById('physics-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        const resize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        };
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Physics Symbols & Formulas
+        const symbols = ['E=mc²', 'F=ma', '∑F=0', 'v=u+at', 'λ', 'Ω', 'ℏ', '∆x', '∮', 'π', 'ρ', 'θ', 'KE=½mv²', 'G', 'ψ', 'μ', 'α', 'β'];
+        
+        const particles = [];
+        const particleCount = Math.min(window.innerWidth / 15, 60); 
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.text = symbols[Math.floor(Math.random() * symbols.length)];
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.isText = Math.random() > 0.3; // 70% chance to be text
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse Repel
+                const dx = this.x - mouse.x;
+                const dy = this.y - mouse.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 150){
+                    const angle = Math.atan2(dy, dx);
+                    const force = (150 - dist) / 150;
+                    this.x += Math.cos(angle) * force * 2;
+                    this.y += Math.sin(angle) * force * 2;
+                }
+            }
+
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#6366f1'; // Indigo
+
+                if (this.isText) {
+                    ctx.font = '16px "Space Grotesk"';
+                    ctx.fillText(this.text, this.x, this.y);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        const mouse = { x: -1000, y: -1000 };
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        const animate = () => {
+            ctx.clearRect(0, 0, width, height);
+
+            // Connect particles
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = '#4f46e5'; 
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if (dist < 120) {
+                        ctx.globalAlpha = (1 - dist / 120) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        };
+        animate();
 
         // Accordion Data & Rendering
         const scheduleData = [
@@ -435,54 +590,54 @@
                 week: "Week 1: Motion",
                 content: `
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 1: Revision</strong>Equations of motion, Graphs, Distance/Displacement, V=u+at derivations.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 2: Mock Test</strong>1.5 Hr Online Test via Google Meet. Instant submission.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 3: Analysis</strong>Mistake identification, concept clearing, doubt solving.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 1: Revision</strong>Equations of motion, Graphs, Distance/Displacement, V=u+at derivations.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 2: Mock Test</strong>1.5 Hr Online Test via Google Meet. Instant submission.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 3: Analysis</strong>Mistake identification, concept clearing, doubt solving.</div>
                     </div>`
             },
             {
                 week: "Week 2: Force & Laws of Motion",
                 content: `
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 4: Revision</strong>Newton's 3 Laws, Inertia, Momentum Conservation (F=ma).</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 5: Mock Test</strong>1.5 Hr Comprehensive Chapter Test.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 6: Analysis</strong>Numerical walkthroughs and performance feedback.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 4: Revision</strong>Newton's 3 Laws, Inertia, Momentum Conservation (F=ma).</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 5: Mock Test</strong>1.5 Hr Comprehensive Chapter Test.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 6: Analysis</strong>Numerical walkthroughs and performance feedback.</div>
                     </div>`
             },
             {
                 week: "Week 3: Mixed Test 1 (Motion + Force)",
                 content: `
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 7: Quick Revision</strong>Combined formulas, Recap of difficult concepts.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 8: Mock Test</strong>2 Hour Integrated Test. Higher difficulty level.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 9: Analysis</strong>Strategy improvement and inter-chapter connections.</div>
+                        <div class="bg-yellow-900/10 p-4 rounded-xl border border-yellow-500/20"><strong class="text-yellow-300 block mb-2 text-lg">Day 7: Quick Revision</strong>Combined formulas, Recap of difficult concepts.</div>
+                        <div class="bg-yellow-900/10 p-4 rounded-xl border border-yellow-500/20"><strong class="text-yellow-300 block mb-2 text-lg">Day 8: Mock Test</strong>2 Hour Integrated Test. Higher difficulty level.</div>
+                        <div class="bg-yellow-900/10 p-4 rounded-xl border border-yellow-500/20"><strong class="text-yellow-300 block mb-2 text-lg">Day 9: Analysis</strong>Strategy improvement and inter-chapter connections.</div>
                     </div>`
             },
             {
                 week: "Week 4: Gravitation",
                 content: `
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 10: Revision</strong>Universal Law, Free fall, Buoyancy, Archimedes Principle.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 11: Mock Test</strong>1.5 Hr Standard Pattern Test.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 12: Analysis</strong>Clarification on Pressure/Density problems.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 10: Revision</strong>Universal Law, Free fall, Buoyancy, Archimedes Principle.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 11: Mock Test</strong>1.5 Hr Standard Pattern Test.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 12: Analysis</strong>Clarification on Pressure/Density problems.</div>
                     </div>`
             },
             {
                 week: "Week 5: Work & Energy",
                 content: `
                     <div class="grid md:grid-cols-3 gap-4 text-sm">
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 13: Revision</strong>Work, Kinetic/Potential Energy, Conservation Law, Power.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 14: Mock Test</strong>1.5 Hr Test focusing on Energy conversions.</div>
-                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 15: Analysis</strong>Power calculation techniques and doubt clearing.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 13: Revision</strong>Work, Kinetic/Potential Energy, Conservation Law, Power.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 14: Mock Test</strong>1.5 Hr Test focusing on Energy conversions.</div>
+                        <div class="bg-indigo-900/20 p-4 rounded-xl border border-indigo-500/20"><strong class="text-indigo-300 block mb-2 text-lg">Day 15: Analysis</strong>Power calculation techniques and doubt clearing.</div>
                     </div>`
             },
             {
                 week: "Week 6-8: Advanced Phase",
                 content: `
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex gap-2"><i data-lucide="check" class="text-yellow-400 h-5 w-5"></i> <span><strong>Week 6:</strong> Mixed Test 2 (Gravitation + Work & Energy)</span></li>
-                        <li class="flex gap-2"><i data-lucide="check" class="text-pink-400 h-5 w-5"></i> <span><strong>Week 7:</strong> Half Syllabus Mega Test (Chapters 1-4)</span></li>
-                        <li class="flex gap-2"><i data-lucide="check" class="text-green-400 h-5 w-5"></i> <span><strong>Week 8:</strong> Sound Chapter + Full Syllabus Final Mock Test</span></li>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex gap-3 bg-white/5 p-4 rounded-xl items-center"><i data-lucide="check-circle" class="text-yellow-400 h-6 w-6"></i> <span><strong class="text-white text-lg block">Week 6: Mixed Test 2</strong>Gravitation + Work & Energy</span></li>
+                        <li class="flex gap-3 bg-white/5 p-4 rounded-xl items-center"><i data-lucide="check-circle" class="text-pink-400 h-6 w-6"></i> <span><strong class="text-white text-lg block">Week 7: Half Syllabus Mega Test</strong>Chapters 1-4 Complete Assessment</span></li>
+                        <li class="flex gap-3 bg-white/5 p-4 rounded-xl items-center"><i data-lucide="check-circle" class="text-green-400 h-6 w-6"></i> <span><strong class="text-white text-lg block">Week 8: Full Syllabus</strong>Sound Chapter + Final Mock Test</span></li>
                     </ul>`
             }
         ];
@@ -491,12 +646,14 @@
 
         scheduleData.forEach((item, index) => {
             const html = `
-                <div class="glass-card rounded-xl overflow-hidden border border-white/5">
-                    <button class="w-full text-left p-5 flex justify-between items-center bg-white/5 hover:bg-white/10 transition" onclick="toggleAccordion(${index})">
-                        <span class="font-bold text-lg">${item.week}</span>
-                        <i data-lucide="chevron-down" class="transition-transform duration-300 transform" id="icon-${index}"></i>
+                <div class="glass-card rounded-2xl overflow-hidden border border-white/5 group">
+                    <button class="w-full text-left p-6 flex justify-between items-center bg-transparent hover:bg-white/5 transition duration-300" onclick="toggleAccordion(${index})">
+                        <span class="font-bold text-xl text-white group-hover:text-indigo-300 transition">${item.week}</span>
+                        <div class="bg-white/10 p-2 rounded-full">
+                             <i data-lucide="chevron-down" class="transition-transform duration-300 transform text-white" id="icon-${index}"></i>
+                        </div>
                     </button>
-                    <div class="hidden p-5 bg-black/20 border-t border-white/5" id="content-${index}">
+                    <div class="hidden p-6 bg-black/30 border-t border-white/5 text-slate-300" id="content-${index}">
                         ${item.content}
                     </div>
                 </div>
@@ -504,7 +661,6 @@
             accordionContainer.innerHTML += html;
         });
 
-        // Re-init icons for the new content
         lucide.createIcons();
 
         function toggleAccordion(index) {
