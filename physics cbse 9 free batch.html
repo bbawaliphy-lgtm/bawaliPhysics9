@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Physics Class by Biplab Bawali | Class 9 CBSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #0F172A;
+            --accent: #F59E0B;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(79, 70, 229, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- Background Ambience -->
+    <div class="blob bg-indigo-600 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="blob bg-purple-600 w-96 h-96 rounded-full bottom-0 right-0 translate-x-1/2 translate-y-1/2"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="atom" class="text-indigo-400 h-8 w-8"></i>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-lg md:text-xl tracking-tight leading-none">Smart Physics Class</span>
+                        <span class="text-[10px] md:text-xs text-indigo-400 font-bold tracking-widest uppercase">by Biplab Bawali</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#about" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">About</a>
+                        <a href="#mentor" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">Mentor</a>
+                        <a href="#schedule" class="hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition">Schedule</a>
+                        <a href="#join" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full text-sm font-bold transition shadow-lg shadow-indigo-500/30">Join Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-bounce">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                <span class="text-sm font-medium text-indigo-200">100% Free Program for Class 9 CBSE</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-100 to-indigo-300">
+                Boost Your Physics Marks.<br>
+                <span class="text-indigo-500">Structured Practice</span> is Key.
+            </h1>
+            
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-300">
+                An 8-week intensive program combining chapter-wise revision, mock tests, and live solution discussions. 
+                Designed exclusively for West Bengal students.
+            </p>
+            
+            <div class="mt-10 flex justify-center gap-4 flex-col sm:flex-row">
+                <a href="https://chat.whatsapp.com/HwUbJTtZHI47fE2Xl5yfo2" target="_blank" class="group relative inline-flex items-center justify-center px-8 py-3 text-lg font-bold text-white transition-all duration-200 bg-green-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:bg-green-700 shadow-lg shadow-green-600/30">
+                    <i data-lucide="message-circle" class="mr-2 h-5 w-5"></i>
+                    Join WhatsApp Group
+                </a>
+                <a href="#schedule" class="inline-flex items-center justify-center px-8 py-3 text-lg font-bold text-white transition-all duration-200 glass-card rounded-full hover:bg-white/10">
+                    View Schedule
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Philosophy Section -->
+    <section id="about" class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center reveal">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">The Philosophy</h2>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400">
+                                <i data-lucide="alert-triangle" class="h-6 w-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-1">The Challenge</h3>
+                                <p class="text-slate-400">Physics feels confusing? Marks stagnant? The issue is often lack of structured practice, not lack of studying.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400">
+                                <i data-lucide="check-circle-2" class="h-6 w-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold mb-1">The Solution</h3>
+                                <p class="text-slate-400">Systematic chapter-wise coverage, regular mock tests, and live solution discussions for instant doubt clearing.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-6 glass-card rounded-2xl border-l-4 border-indigo-500">
+                        <p class="text-lg italic font-medium">"Students don't learn by reading → They learn by solving."</p>
+                        <p class="mt-2 text-indigo-400 font-bold">Practice + Correction = Confidence + Marks</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-0 bg-indigo-500/30 blur-3xl rounded-full"></div>
+                    <div class="relative glass-panel p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-6 border-b border-white/10 pb-4">Who Is This For?</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="check" class="text-indigo-400"></i>
+                                <span>Class 9 Students preparing for finals</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="check" class="text-indigo-400"></i>
+                                <span>Students who fear Physics & find it confusing</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="check" class="text-indigo-400"></i>
+                                <span>Parents wanting disciplined, exam-oriented practice</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i data-lucide="check" class="text-indigo-400"></i>
+                                <span>Building a strong foundation for Class 10 (JEE/NEET)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentor Section -->
+    <section id="mentor" class="py-20 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <span class="text-indigo-400 font-bold tracking-wider uppercase text-sm">Expert Guidance</span>
+                <h2 class="text-4xl font-bold mt-2">Know Your Mentor</h2>
+            </div>
+            
+            <div class="glass-panel rounded-3xl p-1 md:p-8 reveal">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="w-full md:w-1/3 flex justify-center">
+                        <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-indigo-500/30 shadow-2xl bg-slate-800">
+                             <!-- INSTRUCTION: Replace 'your-image-filename.jpg' below with the actual name of your image file -->
+                            <img src="biplab-sir.jpg.jpg" alt="Biplab Bawali" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><i data-lucide=\'image\' class=\'w-16 h-16 text-slate-600\'></i></div>'">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3 text-center md:text-left">
+                        <h3 class="text-3xl font-bold text-white mb-2">Biplab Bawali</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">M.Sc. Physics (1st Class)</span>
+                            <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">Ph.D. (Rajabazar Science College)</span>
+                        </div>
+                        
+                        <div class="space-y-4 text-slate-300">
+                            <p class="text-lg">
+                                <span class="text-white font-semibold">Current Position:</span> Research Associate at <span class="text-yellow-400 font-bold">IISc Bangalore</span>
+                            </p>
+                            <p>
+                                With strong academic credentials and research experience at India's premier institute, Biplab Sir brings conceptual clarity and a practical problem-solving approach to Physics education.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-20 bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold">What's Included?</h2>
+                <p class="text-slate-400 mt-2">Everything you need to score 85%+</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 mb-4">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Chapter-wise Revision</h3>
+                    <p class="text-sm text-slate-400">Full CBSE syllabus covered systematically with focus on deep understanding.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center text-red-400 mb-4">
+                        <i data-lucide="video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Live Online Classes</h3>
+                    <p class="text-sm text-slate-400">Interactive sessions via Google Meet with instant doubt solving.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center text-green-400 mb-4">
+                        <i data-lucide="file-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Final Exam Pattern</h3>
+                    <p class="text-sm text-slate-400">Questions strictly focused on CBSE exam pattern and marking scheme.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 mb-4">
+                        <i data-lucide="box"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">3D Animations</h3>
+                    <p class="text-sm text-slate-400">Visual learning for complex concepts to aid memory retention.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center text-yellow-400 mb-4">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Digital Classnotes</h3>
+                    <p class="text-sm text-slate-400">Comprehensive study material provided after every session.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="glass-card p-6 rounded-2xl reveal">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center text-pink-400 mb-4">
+                        <i data-lucide="message-square"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
+                    <p class="text-sm text-slate-400">Dedicated WhatsApp group for doubt clearing and peer support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section (Accordion) -->
+    <section id="schedule" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <span class="text-indigo-400 font-bold tracking-wider uppercase text-sm">The Roadmap</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2">8-Week Complete Strategy</h2>
+                <p class="text-slate-400 mt-2">3 Days per Week | 24 Sessions Total</p>
+            </div>
+
+            <div class="space-y-4 reveal" id="accordion-container">
+                <!-- JavaScript will populate this -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Test Summary Table -->
+    <section class="py-20 bg-slate-900/50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-2xl p-6 overflow-hidden reveal">
+                <h3 class="text-2xl font-bold mb-6">Test Summary Overview</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 text-indigo-300 uppercase text-xs tracking-wider">
+                                <th class="p-4">Week</th>
+                                <th class="p-4">Test Type</th>
+                                <th class="p-4">Chapters</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-slate-300 divide-y divide-white/5">
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">1</td>
+                                <td class="p-4">Chapter Test</td>
+                                <td class="p-4">Motion</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">2</td>
+                                <td class="p-4">Chapter Test</td>
+                                <td class="p-4">Force & Laws</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">3</td>
+                                <td class="p-4 text-yellow-400">Mixed Test 1</td>
+                                <td class="p-4">Motion + Force</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">4</td>
+                                <td class="p-4">Chapter Test</td>
+                                <td class="p-4">Gravitation</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">5</td>
+                                <td class="p-4">Chapter Test</td>
+                                <td class="p-4">Work & Energy</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">6</td>
+                                <td class="p-4 text-yellow-400">Mixed Test 2</td>
+                                <td class="p-4">Gravitation + Work & Energy</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">7</td>
+                                <td class="p-4 text-pink-400">Half Syllabus</td>
+                                <td class="p-4">Chapters 1-4</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition">
+                                <td class="p-4 font-bold text-white">8</td>
+                                <td class="p-4 text-green-400 font-bold">Full Syllabus</td>
+                                <td class="p-4">Sound + All Chapters</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="join" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-indigo-900/40"></div>
+        <div class="max-w-4xl mx-auto px-4 relative z-10 text-center reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Let's Make Physics Easier</h2>
+            <p class="text-xl text-indigo-200 mb-8">"Practice + Correction = Confidence + Marks"</p>
+            
+            <div class="glass-panel max-w-lg mx-auto p-8 rounded-3xl border border-indigo-500/50 shadow-2xl shadow-indigo-500/20">
+                <h3 class="text-2xl font-bold mb-4">Secure Your Spot Now</h3>
+                <p class="text-sm text-slate-400 mb-6">Small batch size for personalized attention.</p>
+                
+                <a href="https://chat.whatsapp.com/HwUbJTtZHI47fE2Xl5yfo2" target="_blank" class="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 mb-4">
+                    <i data-lucide="message-circle" class="h-6 w-6"></i>
+                    Join WhatsApp Group
+                </a>
+                
+                <div class="flex flex-col gap-2">
+                    <a href="tel:7980143221" class="text-lg font-bold hover:text-indigo-400 transition">
+                        <i data-lucide="phone" class="inline h-5 w-5 mr-2"></i> 7980143221
+                    </a>
+                    <span class="text-xs text-slate-500 bg-black/20 px-3 py-1 rounded-full inline-block mx-auto">Call only between 8 PM - 10 PM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black/40 py-8 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+            <p>&copy; 2025 Physics Smart Class by BIPLAB BAWALI.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Reveal Animation Logic
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+            
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Trigger once on load
+
+        // Accordion Data & Rendering
+        const scheduleData = [
+            {
+                week: "Week 1: Motion",
+                content: `
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 1: Revision</strong>Equations of motion, Graphs, Distance/Displacement, V=u+at derivations.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 2: Mock Test</strong>1.5 Hr Online Test via Google Meet. Instant submission.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 3: Analysis</strong>Mistake identification, concept clearing, doubt solving.</div>
+                    </div>`
+            },
+            {
+                week: "Week 2: Force & Laws of Motion",
+                content: `
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 4: Revision</strong>Newton's 3 Laws, Inertia, Momentum Conservation (F=ma).</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 5: Mock Test</strong>1.5 Hr Comprehensive Chapter Test.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 6: Analysis</strong>Numerical walkthroughs and performance feedback.</div>
+                    </div>`
+            },
+            {
+                week: "Week 3: Mixed Test 1 (Motion + Force)",
+                content: `
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 7: Quick Revision</strong>Combined formulas, Recap of difficult concepts.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 8: Mock Test</strong>2 Hour Integrated Test. Higher difficulty level.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 9: Analysis</strong>Strategy improvement and inter-chapter connections.</div>
+                    </div>`
+            },
+            {
+                week: "Week 4: Gravitation",
+                content: `
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 10: Revision</strong>Universal Law, Free fall, Buoyancy, Archimedes Principle.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 11: Mock Test</strong>1.5 Hr Standard Pattern Test.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 12: Analysis</strong>Clarification on Pressure/Density problems.</div>
+                    </div>`
+            },
+            {
+                week: "Week 5: Work & Energy",
+                content: `
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 13: Revision</strong>Work, Kinetic/Potential Energy, Conservation Law, Power.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 14: Mock Test</strong>1.5 Hr Test focusing on Energy conversions.</div>
+                        <div class="bg-white/5 p-4 rounded-lg"><strong class="text-indigo-400 block mb-1">Day 15: Analysis</strong>Power calculation techniques and doubt clearing.</div>
+                    </div>`
+            },
+            {
+                week: "Week 6-8: Advanced Phase",
+                content: `
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex gap-2"><i data-lucide="check" class="text-yellow-400 h-5 w-5"></i> <span><strong>Week 6:</strong> Mixed Test 2 (Gravitation + Work & Energy)</span></li>
+                        <li class="flex gap-2"><i data-lucide="check" class="text-pink-400 h-5 w-5"></i> <span><strong>Week 7:</strong> Half Syllabus Mega Test (Chapters 1-4)</span></li>
+                        <li class="flex gap-2"><i data-lucide="check" class="text-green-400 h-5 w-5"></i> <span><strong>Week 8:</strong> Sound Chapter + Full Syllabus Final Mock Test</span></li>
+                    </ul>`
+            }
+        ];
+
+        const accordionContainer = document.getElementById('accordion-container');
+
+        scheduleData.forEach((item, index) => {
+            const html = `
+                <div class="glass-card rounded-xl overflow-hidden border border-white/5">
+                    <button class="w-full text-left p-5 flex justify-between items-center bg-white/5 hover:bg-white/10 transition" onclick="toggleAccordion(${index})">
+                        <span class="font-bold text-lg">${item.week}</span>
+                        <i data-lucide="chevron-down" class="transition-transform duration-300 transform" id="icon-${index}"></i>
+                    </button>
+                    <div class="hidden p-5 bg-black/20 border-t border-white/5" id="content-${index}">
+                        ${item.content}
+                    </div>
+                </div>
+            `;
+            accordionContainer.innerHTML += html;
+        });
+
+        // Re-init icons for the new content
+        lucide.createIcons();
+
+        function toggleAccordion(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>
